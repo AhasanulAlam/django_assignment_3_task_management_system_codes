@@ -1,0 +1,54 @@
+{% extends "base.html" %} 
+{% load crispy_forms_tags %} 
+{% block title %} 
+    Task Magt System | Show Tasks 
+{% endblock %} 
+
+{% block content %}
+<div class="container text-center my-5">
+  <h1>~~~ : Welcome to Task Management System : ~~~</h1>
+</div>
+<hr />
+
+<div class="row pt-5 container m-auto">
+  {% for task in data %}
+  <div class="col-sm-3 mb-3 mb-sm-0">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{task.task_title}}</h5>
+        <p class="card-text">Task ID: {{task.id }}</p>
+        <p class="card-text">
+          Description: {{task.task_description | truncatewords:20 }}
+        </p>
+        <p>
+          <small>Assigned Date: {{task.task_assign_date}}</small>
+        </p>
+        <p>
+          <small
+            >Category: {% for cat in task.category.all %}
+            <button class="btn btn-info btn-sm m-2" disabled>
+              {{cat.category_name}}
+            </button>
+            {% endfor %}
+          </small>
+        </p>
+        <hr />
+        {% if task.is_completed %}
+        <div class="d-flex justify-content-around align-items-center">
+          <button class="btn btn-success btn-sm m-2" disabled>Completed</button>
+        </div>
+        {% else %}
+        <div class="d-flex justify-content-around align-items-center">
+          <a href="{% url 'edit_task' task.id %}" class="btn btn-warning">Edit</a>
+          <a href="{% url 'delete_task' task.id %}" class="btn btn-danger">Delete</a>
+          <a href="{% url 'complete_task' task.id %}" class="btn btn-info">Done</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+
+{% endblock %}
